@@ -61,6 +61,7 @@ It would be cool if this displayed the README of the deployment tool on how to d
 Example usage:
 
 .. code-block::
+
   usage: openstack_aio_builder.py [-h] [--cloud-provider CLOUD_PROVIDER]
                                 {rpco,devstack,osa} ...
 
