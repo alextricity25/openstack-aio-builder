@@ -1,0 +1,18 @@
+# OpenStackAIOBuilder user configuration file sample
+
+
+# rpc related configurations
+rpc:
+  deploy_dir: "/tmp"
+  deploy_script: "rpc-openstack/scripts/deploy.sh"
+  rpc_github_repo: "https://github.com/rcbops/rpc-openstack"
+  rpc_branch: "master"
+
+provider:
+  name: "rackspace"
+  auth_url: "https://identity.api.rackspacecloud.com/v2.0/"
+  username: "someuser"
+  password: "password"
+  project_id: ""
+  region_name: "iad"
+  auth_system: "rackspace"

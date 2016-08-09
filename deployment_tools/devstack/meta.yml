@@ -1,0 +1,28 @@
+# Any extra information about the deployment tool that the main program will use needs to be in here.
+
+# The URL to the github repository for this deployment tool
+# Required by the main program
+github_repo: "https://github.com/openstack-dev/devstack"
+
+# What deployment scripts need to be run for an AIO to be build with this deployment tool
+# Required by the main program
+deployment_scripts:
+  - "stack.sh"
+
+# A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
+# Required by the main program
+shorthand_name: "devstack"
+
+# The driver used to load options from this deployment tool
+# REquired by the main program
+load_options_driver: "deployment_tools.devstack.load_options_driver"
+
+# The README explaining how to deploy an AIO with this deployment tool
+readme_file: "https://raw.githubusercontent.com/openstack-dev/devstack/master/README.md"
+
+# The raw file of the deployment script(s)
+deployment_scripts_links:
+  - "https://github.com/openstack-dev/devstack/blob/master/stack.sh"
+
+description: |
+  DevStack is a set of scripts and utilities to quickly deploy an OpenStack cloud.

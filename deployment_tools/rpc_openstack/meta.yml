@@ -1,0 +1,32 @@
+# Any extra information about the deployment tool that the main program will use needs to be in here.
+
+# The URL to the github repository for this deployment tool
+# Required by the main program
+github_repo: "https://github.com/rcbops/rpc-openstack"
+
+# What deployment scripts need to be run for an AIO to be build with this deployment tool
+# Required by the main program
+deployment_scripts:
+  - "deploy.sh"
+
+# A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
+# Required by the main program
+shorthand_name: "rpco"
+
+# The driver used to load options from this deployment tool
+# REquired by the main program
+load_options_driver: "deployment_tools.rpc_openstack.load_options_driver"
+
+# The README explaining how to deploy an AIO with this deployment tool
+readme_file: "https://github.com/rcbops/rpc-openstack/blob/master/README.md"
+
+# The raw file of the deployment script(s)
+deployment_scripts_links:
+  - "https://raw.githubusercontent.com/rcbops/rpc-openstack/master/scripts/deploy.sh"
+
+
+# description
+# required by the main program
+description: |
+  The rpc-openstack repo includes add-ons for the Rackspace Private Cloud product that integrate with the
+  openstack-ansible set of Ansible playbooks and roles
