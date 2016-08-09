@@ -27,15 +27,14 @@ server.
 
 Features that it will include are:
 
-  * Support for multiple deployment tools
-  * Support for multiple cloud service providers(and maybe bare metal?)
-  * Ability to integrate a gerrit patch set, or github pull request by defining it before deployment.
-  * Dynamically build out python options based on the deployment script's configurable variables. For example,
+* Support for multiple deployment tools
+* Support for multiple cloud service providers(and maybe bare metal?)
+* Ability to integrate a gerrit patch set, or github pull request by defining it before deployment.
+* Dynamically build out python options based on the deployment script's configurable variables. For example,
   OpenStack-Ansible has a "bootstrap-aio.sh" script with many options that are configured through bash [environment]
   variables. These variables will be mapped to python options that can be consumed by the users of this tool. Options
   that are not specified should take on the defualt value of the original deployment script(i.e the bootstrap-aio.sh).
-  * Subcommands for this tool should be the deployment tools that are avialable to use. For example:
-  * hopefully these are bullet points
+* Subcommands for this tool should be the deployment tools that are avialable to use. For example:
 
 .. code-block::
 
