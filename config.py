@@ -24,12 +24,6 @@ what should the master config look like? Maybe something like...
         Also, options that have been loaded by the load_opitons_driver go here.
 '''
 
-# Still a lot of work to be done here, since subcommand options will be built around how
-# the deployment tools' load_options_driver works, it need to incorporate these functions some how.
-# The config will change depending how load_options_driver works.
-
-# This file will run the deploymnet_tools load_options_driver, and load it into the config
-
 CONFIG_FILES = [
     "/etc/openstack_aio_builder/config.yml",
     "~/.config/openstack_aio_builder.yml",
@@ -65,8 +59,15 @@ def get_conf():
                 try:
                     config_file_dict["provider"] = loaded_config["provider"]
                 except KeyError:
+                    # TODO: I should raise the proper exceptions here.
                     print "Cloud provider must be defined in the global configuration file!"
                     exit()
+
+                # Check to see if the provider is supported
+                if config_file_dict["provider"]["name"] not in SUPPORTED_PROVIDERS:
+                    print "The provider {} is not supported".format(config_file_dict["provider"])
+                    exit()
+
 
             # Load the deployment tools' meta.yml file into the config dictionary.
             _load_deployment_tools_meta(config_file_dict)
