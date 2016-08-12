@@ -49,10 +49,13 @@ def get_conf():
 
     for config_file in CONFIG_FILES:
         # If file is not found, try next one
-        if not os.path.isfile(config_file):
+        print "Reading {}...".format(config_file)
+        config_file_path = os.path.expanduser(config_file)
+        if not os.path.isfile(config_file_path):
+            print "Config file {} not found".format(config_file)
             continue
         else:
-            with open(config_file, 'r') as f:
+            with open(config_file_path, 'r') as f:
                 loaded_config = yaml.safe_load(f)
 
                 # Loading cloud provider
@@ -67,7 +70,6 @@ def get_conf():
                 if config_file_dict["provider"]["name"] not in SUPPORTED_PROVIDERS:
                     print "The provider {} is not supported".format(config_file_dict["provider"])
                     exit()
-
 
             # Load the deployment tools' meta.yml file into the config dictionary.
             _load_deployment_tools_meta(config_file_dict)

@@ -1,7 +1,7 @@
 import yaml
 
 
-class InstanceMaker():
+class BaseInstanceMaker():
 
     def __init__(self, name, cloud_init_config):
         """
@@ -12,6 +12,7 @@ class InstanceMaker():
         self.name = name
         self.cloud_init_config = cloud_init_config
 
-
+    # Every provider plugin must have the InstanceMaker class and the
+    # create_instance function
     def create_instance(self):
         pass

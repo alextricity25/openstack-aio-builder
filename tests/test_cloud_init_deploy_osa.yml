@@ -1,0 +1,21 @@
+#cloud-config
+apt_mirror: http://mirror.rackspace.com/ubuntu/
+package_upgrade: true
+packages:
+  - git-core
+  - screen
+  - vim
+runcmd:
+  - export ANSIBLE_ROLE_FETCH_MODE=git-clone
+  - export ANSIBLE_FORCE_COLOR=true
+  - export PYTHONUNBUFFERED=1
+  - export REPO=https://github.com/openstack/openstack-ansible
+  - export BRANCH=master
+  - export ANSIBLE_ROLE_FETCH_MODE=git-clone
+  - git clone -b ${BRANCH} ${REPO} /opt/openstack-ansible
+  - git config --global user.email "miguel.cantu@rackspace.com"
+  - git config --global user.name "Miguel Alex Cantu"
+  - cd /opt/openstack-ansible && scripts/bootstrap-ansible.sh
+  - cd /opt/openstack-ansible && scripts/bootstrap-aio.sh
+  - cd /opt/openstack-ansible && scripts/run-playbooks.sh
+output: { all: '| tee -a /var/log/cloud-init-output.log' }
