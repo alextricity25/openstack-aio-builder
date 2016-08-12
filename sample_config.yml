@@ -3,18 +3,13 @@ provider:
   name: "rackspace"
   auth_info:
     auth_url: "https://identity.api.rackspacecloud.com/v2.0/"
-    username: "someuser"
+    username: "username"
     password: "password"
+    tenant_id: ""
     project_id: ""
-    region_name: "iad"
+    region_name: ""
     auth_system: "rackspace"
   instance_info:
-    instance_name: "cantu-automate"
-    flavor: "8"
-    image: ""
-    files: ""
-    key_name: ""
-    admin_pass: ""
-
-
-
+    image: "imagename"
+    flavor: "flavor"
+    key_name: "keyname"
