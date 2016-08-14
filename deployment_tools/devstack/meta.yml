@@ -1,4 +1,9 @@
 # Any extra information about the deployment tool that the main program will use needs to be in here.
+# The name of the deployment tool. It must be the same as the name of the directory for this
+# deployment tool in the deployment_tools directory becuase it is also used to load
+# it's respective plugins
+# Required by the main program
+name: "devstack"
 
 # The URL to the github repository for this deployment tool
 # Required by the main program

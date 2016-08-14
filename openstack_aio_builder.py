@@ -16,24 +16,51 @@ def main():
     # Create options based off of that configuration
     parser = get_args_parser(config_dict)
     args = parser.parse_args()
-
+    #print vars(args)
+    #print dir(args)
     # import the right cloud provider
     provider = config_dict['provider']['name']
     InstanceMaker = __import__("cloud_providers.{}.instance_maker".format(provider), fromlist=["blah"]).InstanceMaker
 
-    # Instantiate an InstanceMaker object
-    # We are using this cloud_init config for testing purposes,
-    # the real cloud_init_config will be dynamically generated
-    # by the deployment tool's cloud_init_generator plugin
-    with open(os.path.abspath("./tests/test_cloud_init_deploy_osa.yml")) as f:
-        print "opening..{}".format(os.path.abspath("./tests/test_cloud_init_deploy_osa.yml"))
-        instance_maker = InstanceMaker("cantu-testing", f, config_dict['provider']['auth_info'],
-                                        **config_dict['provider']['instance_info'])
-        instance_maker.create_instance()
+    # Get the meta information for the subcommand being run
+    deployment_tool_name = vars(args)['deployment_tool_name']
+    deployment_tool_meta_info = _get_meta_info(config_dict['deployment_tools'], deployment_tool_name)
+
+    # import the right cloud_init_generator plugin
+    CloudInitGenerator = __import__("deployment_tools.{}.cloud_init_generator".format(
+        vars(args)['deployment_tool_name']), fromlist=["blah"]).CloudInitGenerator
+
+    # Instantiating a CloudInitGenerator object
+    cloud_init_generator = CloudInitGenerator(args, deployment_tool_meta_info)
+
+    # Generate the cloud_init config string representation
+    cloud_init_config_string = cloud_init_generator.generate_cloud_init()
+
+    instance_maker = InstanceMaker(args.instance_name, cloud_init_config_string,
+                                   config_dict['provider']['auth_info'],
+                                   **config_dict['provider']['instance_info']
+                                   )
+
+    instance_maker.create_instance()
 
 
 
-    # Create the instance
+def _get_meta_info(deployment_tools, deployment_tool_name):
+    """
+    Returns the dictionary in the deployment_tools list that contains
+    the key value pair 'name':deployment_tool_name
+    TODO: Change the structure of how deployment_tools are loaded into the config.
+    List of dictionaries isn't very practical.
+
+    :param deployment_tools: list of dictionaries representing a deployment_tool
+    :param deployment_tool_name: the name of the deployment_tool whose meta info the function is returning
+    :return: a dictionary representing a deployment_tool's meta info
+    """
+
+    for deployment_tool in deployment_tools:
+        if deployment_tool_name in deployment_tool['meta'].values():
+            return deployment_tool['meta']
+
 
 
 

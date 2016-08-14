@@ -1,13 +1,21 @@
 # Any extra information about the deployment tool that the main program will use needs to be in here.
+# The name of the deployment tool. It must be the same as the name of the directory for this
+# deployment tool in the deployment_tools directory becuase it is also used to load
+# it's respective plugins
+# Required by the main program
+name: "rpc_openstack"
 
 # The URL to the github repository for this deployment tool
 # Required by the main program
 github_repo: "https://github.com/rcbops/rpc-openstack"
 
 # What deployment scripts need to be run for an AIO to be build with this deployment tool
+# This path is relative to the repos root directory
+# i.e. if the deployment script is in /opt/rpc-openstack/scripts/deploy.sh, then the path here
+# would be "./scripts/deploy.sh"
 # Required by the main program
 deployment_scripts:
-  - "deploy.sh"
+  - "./scripts/deploy.sh"
 
 # A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
 # Required by the main program

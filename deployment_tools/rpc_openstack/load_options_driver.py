@@ -23,6 +23,9 @@ def load_options(config_file_dict):
                 option_info.append(result.group(2))
                 option_info.append("For a description, see RPCO README")
                 options_list.append(option_info)
+
+    # Adding some extra options that are not in the deployment files for convenience.
+    options_list.append(["--branch", "master", "The branch of rpc-openstack to checkout"])
     return options_list
 
 
