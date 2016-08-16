@@ -2,13 +2,9 @@ import yaml
 
 from args import get_args_parser
 from config import get_conf
-import pprint
-import os
 
 
 def main():
-
-    #args = get_args()
 
     # Build the initial configuration dictonary
     config_dict = get_conf()
@@ -16,9 +12,7 @@ def main():
     # Create options based off of that configuration
     parser = get_args_parser(config_dict)
     args = parser.parse_args()
-    #print vars(args)
-    #print dir(args)
-    # import the right cloud provider
+    # Import the right cloud provider
     provider = config_dict['provider']['name']
     InstanceMaker = __import__("cloud_providers.{}.instance_maker".format(provider), fromlist=["blah"]).InstanceMaker
 
@@ -40,9 +34,8 @@ def main():
                                    config_dict['provider']['auth_info'],
                                    **config_dict['provider']['instance_info']
                                    )
-
+    # Create the instance
     instance_maker.create_instance()
-
 
 
 def _get_meta_info(deployment_tools, deployment_tool_name):
@@ -60,8 +53,6 @@ def _get_meta_info(deployment_tools, deployment_tool_name):
     for deployment_tool in deployment_tools:
         if deployment_tool_name in deployment_tool['meta'].values():
             return deployment_tool['meta']
-
-
 
 
 if __name__ == "__main__":

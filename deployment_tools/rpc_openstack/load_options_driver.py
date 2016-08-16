@@ -17,7 +17,7 @@ def load_options(config_file_dict):
         lines_of_file = response.text.split('\n')
         for line in lines_of_file:
             option_info = list()
-            result = re.search("^export ([_A-Z]+)=[\$\{\}_A-Z]+:-\"([a-z]+)\"\}", line)
+            result = re.search("^export ([_A-Z]+)=[\$\{\}_A-Z]+:-[\"\']([=\w\.\/-]*)[\"\']\}", line)
             if result:
                 option_info.append("--{}".format(result.group(1).lower()))
                 option_info.append(result.group(2))
