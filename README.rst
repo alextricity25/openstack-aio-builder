@@ -54,6 +54,7 @@ It would be cool if this displayed the README of the deployment tool on how to d
 Example usage for openstack-ansible plugin:
 
 .. code-block::
+
   alex:openstack-aio-builder$ python openstack_aio_builder.py --instance-name cantu-08-17-osa osa -h
   Reading /etc/openstack_aio_builder/config.yml...
   Config file /etc/openstack_aio_builder/config.yml not found
@@ -90,6 +91,9 @@ Example usage for openstack-ansible plugin:
                           master)
 
 Example usage for rpc-openstack plugin:
+
+.. code-block::
+
   alex:openstack-aio-builder$ python openstack_aio_builder.py --instance-name cantu-08-17-osa rpco -h
   Reading /etc/openstack_aio_builder/config.yml...
   Config file /etc/openstack_aio_builder/config.yml not found
