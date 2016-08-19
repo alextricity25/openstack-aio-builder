@@ -69,6 +69,9 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         # Make sure we are ALWAYS deploying an AIO
         commands.append(self._prepare_option("DEPLOY_AIO", "yes"))
 
+        # Set ansible_role_fetch_mode
+        commands.append(self._prepare_option("ANSIBLE_ROLE_FETCH_MODE", "git-clone"))
+
         # Export HOME variable, because some tasks in the openstack-ansible
         # project require it, and the system hasn't set the variable this early
         # into the boot process.

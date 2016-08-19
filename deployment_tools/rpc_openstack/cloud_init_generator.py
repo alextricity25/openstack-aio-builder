@@ -76,6 +76,9 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         # Make sure we are ALWAYS deploying an AIO
         commands.append(self._prepare_option("DEPLOY_AIO", "yes"))
 
+        # Make sure we are using git to get the OpenStack-Ansible roles
+        commands.append(self._prepare_option("ANSIBLE_ROLE_FETCH_MODE", "yes"))
+
         # Clone the rpc-openstack repository
         # The branch value is loaded as an argparse argument in load_options_driver
         commands.append("git clone -b $BRANCH --recursive {} /opt/rpc-openstack".format(

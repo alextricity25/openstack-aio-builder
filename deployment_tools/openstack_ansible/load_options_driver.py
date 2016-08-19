@@ -11,6 +11,7 @@ def load_options(config_file_dict):
     # Read in each file, parsing out each variable that starts with "export".
     # This is my rule: any bash variable exported to the environment is a configurable option for osa AIO,
     # with defaults set to the bash variable's value defined in the deployment script.
+    # TODO: What is these change? We need a better way to grab these scripts.
     for deployment_scripts_link in deployment_scripts_links:
         response = requests.get(deployment_scripts_link)
         lines_of_file = response.text.split('\n')
