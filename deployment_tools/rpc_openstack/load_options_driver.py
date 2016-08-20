@@ -18,8 +18,9 @@ def load_options(config_file_dict):
     # If the repo already exists, print out a warning informing the user that it
     # might be outdated
     if os.path.isdir(RPCO_TEMP_DIR):
-        print ("WARNING: {} already exists, and could be outdated. If you want to pull in the latest"
-               " codebase, delete the directory").format(RPCO_TEMP_DIR)
+        #print ("WARNING: {} already exists, and could be outdated. If you want to pull in the latest"
+               #" codebase, delete the directory").format(RPCO_TEMP_DIR)
+        pass
         # TODO: Make an option that will force delete RPCO_TEMP_DIR
         # shutil.rmtree(RPCO_TEMP_DIR)
     else:

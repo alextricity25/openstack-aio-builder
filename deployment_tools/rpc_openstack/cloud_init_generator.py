@@ -1,7 +1,5 @@
 from ..cloud_init_generator import BaseCloudInitGenerator
 import yaml
-import pprint
-
 
 
 class CloudInitGenerator(BaseCloudInitGenerator):
@@ -10,8 +8,8 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         """
         Generate a cloud_init config file for deploying a rpc-openstack AIO.
 
-        :param args:
-        :param kwargs:
+        :param args: arguments from argparse
+        :param kwargs: Any arbitrary kwargs that can extend this plugin's functionality.
         """
         BaseCloudInitGenerator.__init__(self, config_dict, args)
 

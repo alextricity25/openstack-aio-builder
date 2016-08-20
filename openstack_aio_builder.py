@@ -16,7 +16,6 @@ def main():
     config_dict = get_conf()
 
     # Load the subparsers
-    print "Loading subparsers..."
     parser = load_subparsers(config_dict, parser)
 
     args = parser.parse_args()

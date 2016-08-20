@@ -33,21 +33,7 @@ server.
   openstack-aio-builder <osa | rpc | devstack>
 
 * Options for these subcommands should be dynamically generated based off the configurable values of the deployment
-  tools. For example:
-
-.. code-block::
-
-  openstack-aio-builder osa -h
-  HTTP_PROXY
-  HTTPS_PROXY
-  ANSIBLE_PACKAGE
-  ANSIBLE_ROLE_FILE
-  SSH_DIR
-  DEBIAN_FRONTEND
-  ANSIBLE_ROLE_FETCH_MODE
-  BOOTSTRAP_OPTS
-  DEPLOY_AIO
-  COMMAND_LOGS
+  tools.
 
 It would be cool if this displayed the README of the deployment tool on how to deploy an AIO with it.
 
@@ -55,18 +41,14 @@ Example usage for openstack-ansible plugin:
 
 .. code-block::
 
-  alex:openstack-aio-builder$ python openstack_aio_builder.py --instance-name cantu-08-17-osa osa -h
-  Reading /etc/openstack_aio_builder/config.yml...
-  Config file /etc/openstack_aio_builder/config.yml not found
-  Reading ~/.config/openstack_aio_builder.yml...
+  alex:openstack-aio-builder$ python openstack_aio_builder.py --instance-name cantu-test-adsfasdf osa -h
   usage: openstack_aio_builder.py osa [-h] [--http_proxy HTTP_PROXY]
                                       [--https_proxy HTTPS_PROXY]
-                                      [--ansible_package ANSIBLE_PACKAGE]
+                                      [--ansible_git_release ANSIBLE_GIT_RELEASE]
                                       [--ansible_role_file ANSIBLE_ROLE_FILE]
                                       [--ssh_dir SSH_DIR]
                                       [--debian_frontend DEBIAN_FRONTEND]
                                       [--bootstrap_opts BOOTSTRAP_OPTS]
-                                      [--branch BRANCH]
 
   optional arguments:
     -h, --help            show this help message and exit
@@ -74,9 +56,8 @@ Example usage for openstack-ansible plugin:
                           For a description, see OSA README (default: )
     --https_proxy HTTPS_PROXY
                           For a description, see OSA README (default: )
-    --ansible_package ANSIBLE_PACKAGE
-                          For a description, see OSA README (default:
-                          ansible==2.1.1.0)
+    --ansible_git_release ANSIBLE_GIT_RELEASE
+                          For a description, see OSA README (default: v1.9.4-1)
     --ansible_role_file ANSIBLE_ROLE_FILE
                           For a description, see OSA README (default: ansible-
                           role-requirements.yml)
@@ -87,17 +68,12 @@ Example usage for openstack-ansible plugin:
                           noninteractive)
     --bootstrap_opts BOOTSTRAP_OPTS
                           For a description, see OSA README (default: )
-    --branch BRANCH       The branch of openstack-ansible to checkout (default:
-                          master)
 
 Example usage for rpc-openstack plugin:
 
 .. code-block::
 
-  alex:openstack-aio-builder$ python openstack_aio_builder.py --instance-name cantu-08-17-osa rpco -h
-  Reading /etc/openstack_aio_builder/config.yml...
-  Config file /etc/openstack_aio_builder/config.yml not found
-  Reading ~/.config/openstack_aio_builder.yml...
+  alex:openstack-aio-builder$ python openstack_aio_builder.py --instance-name cantu-test-adsfasdf rpco -h
   usage: openstack_aio_builder.py rpco [-h] [--admin_password ADMIN_PASSWORD]
                                        [--deploy_aio DEPLOY_AIO]
                                        [--deploy_haproxy DEPLOY_HAPROXY]
@@ -111,7 +87,6 @@ Example usage for rpc-openstack plugin:
                                        [--ansible_parameters ANSIBLE_PARAMETERS]
                                        [--ansible_force_color ANSIBLE_FORCE_COLOR]
                                        [--bootstrap_opts BOOTSTRAP_OPTS]
-                                       [--branch BRANCH]
 
   optional arguments:
     -h, --help            show this help message and exit
@@ -134,15 +109,27 @@ Example usage for rpc-openstack plugin:
     --deploy_swift DEPLOY_SWIFT
                           For a description, see RPCO README (default: yes)
     --deploy_hardening DEPLOY_HARDENING
-                          For a description, see RPCO README (default: yes)
+                          For a description, see RPCO README (default: no)
     --ansible_parameters ANSIBLE_PARAMETERS
                           For a description, see RPCO README (default: )
     --ansible_force_color ANSIBLE_FORCE_COLOR
                           For a description, see RPCO README (default: true)
     --bootstrap_opts BOOTSTRAP_OPTS
                           For a description, see RPCO README (default: )
-    --branch BRANCH       The branch of rpc-openstack to checkout (default:
-                          master)
+
+Example usage for the devstack plugin[WIP]:
+Right now the devstack plugin builds a vanilla devstack AIO from master.
+
+.. code-block::
+
+alex:openstack-aio-builder$ python openstack_aio_builder.py --instance-name cantu-test-adsfasdf devstack -h
+usage: openstack_aio_builder.py devstack [-h] [--NO_OPTIONS NO_OPTIONS]
+
+  optional arguments:
+    -h, --help            show this help message and exit
+    --NO_OPTIONS NO_OPTIONS
+                          this plugin only supports building a basic devstack
+                          AIO (default: NO_OPTIONS)
 
 Features that it will include are:
 

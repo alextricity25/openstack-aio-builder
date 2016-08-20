@@ -29,4 +29,4 @@ class InstanceMaker(BaseInstanceMaker):
         print "It should be ready soon-ish. Go grab a coffee, watch a TV show, browse the internet."
         print "Go do whatever you do to entertain yourself for about an hour or so."
         nova = self.client
-        nova.servers.create(self.name,self.image, self.flavor, **self.instance_info)
+        create = nova.servers.create(self.name,self.image, self.flavor, **self.instance_info)

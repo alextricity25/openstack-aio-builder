@@ -1,4 +1,2 @@
-# NOT YET IMPLEMENTED
 def load_options(config_file_dict):
-    return [["not_implemented", "not_implemented", "not_implemented"]]
-    pass
+    return [['--NO_OPTIONS', 'NO_OPTIONS', 'this plugin only supports building a basic devstack AIO']]

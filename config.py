@@ -50,10 +50,8 @@ def get_conf():
     # Find args so they can be passed to the load_options_driver
     for config_file in CONFIG_FILES:
         # If file is not found, try next one
-        print "Reading {}...".format(config_file)
         config_file_path = os.path.expanduser(config_file)
         if not os.path.isfile(config_file_path):
-            print "Config file {} not found".format(config_file)
             continue
         else:
             with open(config_file_path, 'r') as f:
