@@ -1,7 +1,7 @@
 
 class BaseCloudInitGenerator():
 
-    def __init__(self, args):
+    def __init__(self, config_dict, args):
         """
         Base class for the cloud_init_generator plugins for deployment_tools
 
@@ -9,6 +9,7 @@ class BaseCloudInitGenerator():
         :parm writing_dest: The file the driver will write the cloud_init config file to when specified
 
         """
+        self.config_dict = config_dict
         self.args = args
 
     def generate_cloud_init(self):

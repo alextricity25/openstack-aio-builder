@@ -47,6 +47,7 @@ def get_conf():
     :return: a dictionary representing all of the configs
     """
 
+    # Find args so they can be passed to the load_options_driver
     for config_file in CONFIG_FILES:
         # If file is not found, try next one
         print "Reading {}...".format(config_file)
@@ -66,6 +67,9 @@ def get_conf():
                     print "Cloud provider must be defined in the global configuration file!"
                     exit()
 
+                # Load branch name if present, if not present, branch will default to master
+                config_file_dict['branch'] = loaded_config.get('branch', 'master')
+
                 # Check to see if the provider is supported
                 if config_file_dict["provider"]["name"] not in SUPPORTED_PROVIDERS:
                     print "The provider {} is not supported".format(config_file_dict["provider"])
@@ -75,9 +79,6 @@ def get_conf():
             _load_deployment_tools_meta(config_file_dict)
             _load_options_for_deployment_tool(config_file_dict)
             return config_file_dict
-
-
-
 
 def _load_deployment_tools_meta(config_file):
     """

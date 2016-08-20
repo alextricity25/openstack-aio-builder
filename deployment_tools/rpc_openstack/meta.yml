@@ -15,7 +15,7 @@ github_repo: "https://github.com/rcbops/rpc-openstack"
 # would be "./scripts/deploy.sh"
 # Required by the plugin
 deployment_scripts:
-  - "./scripts/deploy.sh"
+  - "/scripts/deploy.sh"
 
 # A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
 # Required by the main program

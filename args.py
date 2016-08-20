@@ -12,10 +12,17 @@ BASE_OPTIONS = [
         "name": "--instance-name",
         "required": True,
         "help": "The name of the instance being spawned"
+    },
+    {
+        "name": "--smoke",
+        "required": False,
+        "default": False,
+        "action": "store_true",
+        "help": "Run program as if it were normally run, but with debug messages and don't actually create the instance"
     }
 ]
 
-def get_args_parser(config_file_dict):
+def get_args_parser():
     # At this point, the provider, and deployment tools' meta.yml file has been loaded into the config.
 
     # Make parser
@@ -24,14 +31,18 @@ def get_args_parser(config_file_dict):
 
     # Load base options
     for base_option_dict in BASE_OPTIONS:
-        parser.add_argument(base_option_dict.pop("name"), **base_option_dict)
+        # This is because we are invoking the get_args_parser method twice, and
+        # BASE_OPTIONS[index]['name'] would already have been pop'ed out.
+        if base_option_dict.get('name', ''):
+            parser.add_argument(base_option_dict.pop("name"), **base_option_dict)
 
     # Load the subparsers
-    _load_subparsers(config_file_dict, parser)
+    #_load_subparsers(config_file_dict, parser)
 
     return parser
 
-def _load_subparsers(config_file_dict, parser):
+
+def load_subparsers(config_file_dict, parser):
     """
     Create a subparser for each corresponding to a deployment tool. i.e OpenStack-Ansible, rpc-openstack
 
@@ -63,3 +74,5 @@ def _load_subparsers(config_file_dict, parser):
         # Adding the arguments for each subparser.
         for option in deployment_tool['options']:
             subparser.add_argument(option[0], default=option[1], help=option[2])
+
+    return parser

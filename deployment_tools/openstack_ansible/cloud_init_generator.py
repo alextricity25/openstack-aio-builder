@@ -4,20 +4,16 @@ import yaml
 
 class CloudInitGenerator(BaseCloudInitGenerator):
 
-    def __init__(self, args, meta_info, **kwargs):
+    def __init__(self, config_dict, args, meta_info, **kwargs):
         """
+        Generate a cloud_init config to deploy an openstack-ansible AIO
+
         :param args:
         :param kwargs:
-        TODO: support these kwargs:
-        kwargs['extra_packages']: list() - list of extra pacakges to be installed
-        kwargs['extra_options']: dict() - dictionary with extra options
-        kwargs['extra_pre_commands']: list() - list of commands to run before deploying rpc-openstack
-
         """
-        BaseCloudInitGenerator.__init__(self, args)
+        BaseCloudInitGenerator.__init__(self, config_dict, args)
 
         self.meta_info = meta_info
-        print "Initialized CloudInitGenerator"
 
     def generate_cloud_init(self):
         """
@@ -77,6 +73,10 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         # into the boot process.
         commands.append(self._prepare_option("HOME", "/root/"))
 
+        # Export the branch name
+        branch = self.config_dict['branch']
+        commands.append(self._prepare_option("BRANCH", branch))
+
         # Clone the openstack-ansible repository
         # The branch value is loaded as an argparse argument in load_options_driver
         commands.append("git clone -b $BRANCH {} /opt/openstack-ansible".format(
@@ -84,7 +84,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
 
         # Grabing AIO deployment scripts from metadata file
         for deployment_script in self.meta_info['deployment_scripts']:
-            commands.append("cd /opt/openstack-ansible && {}".format(deployment_script))
+            commands.append("cd /opt/openstack-ansible && .{}".format(deployment_script))
 
         cloud_init_skeleton['runcmd'] = commands
 

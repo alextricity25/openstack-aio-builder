@@ -9,12 +9,12 @@ name: "openstack_ansible"
 # Required by the main program
 github_repo: "https://github.com/openstack/openstack-ansible"
 
-# What deployment scripts need to be run for an AIO to be build with this deployment tool
-# Required by the main program
+# What deployment scripts need to be run for an AIO to be built with this deployment tool
+# Required by the openstack-ansible's plugin.
 deployment_scripts:
-  - "./scripts/bootstrap-ansible.sh"
-  - "./scripts/bootstrap-aio.sh"
-  - "./scripts/run-playbooks.sh"
+  - "/scripts/bootstrap-ansible.sh"
+  - "/scripts/bootstrap-aio.sh"
+  - "/scripts/run-playbooks.sh"
 
 # A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
 # Required by the main program
@@ -28,10 +28,10 @@ load_options_driver: "deployment_tools.openstack_ansible.load_options_driver"
 readme_file: "https://raw.githubusercontent.com/openstack/openstack-ansible/master/README.rst"
 
 # The raw file of the deployment script(s)
-deployment_scripts_links:
-  - "https://raw.githubusercontent.com/openstack/openstack-ansible/master/scripts/bootstrap-ansible.sh"
-  - "https://raw.githubusercontent.com/openstack/openstack-ansible/master/scripts/bootstrap-aio.sh"
-  - "https://raw.githubusercontent.com/openstack/openstack-ansible/master/scripts/run-playbooks.sh"
+#deployment_scripts_links:
+#  - "https://raw.githubusercontent.com/openstack/openstack-ansible/master/scripts/bootstrap-ansible.sh"
+#  - "https://raw.githubusercontent.com/openstack/openstack-ansible/master/scripts/bootstrap-aio.sh"
+#  - "https://raw.githubusercontent.com/openstack/openstack-ansible/master/scripts/run-playbooks.sh"
 
 description: |
   OpenStack-Ansible is an official OpenStack project which aims to deploy production environments from source in a

@@ -1,19 +1,30 @@
 import yaml
 
 from args import get_args_parser
+from args import load_subparsers
 from config import get_conf
+import pprint
 
 
 def main():
 
-    # Build the initial configuration dictonary
+    # Load base options, initialize parser object
+    parser = get_args_parser()
+
+    # Build the initial configuration dictonary.
+    # Pass the parser because the load_options_driver might need some of it's information
     config_dict = get_conf()
 
-    # Create options based off of that configuration
-    parser = get_args_parser(config_dict)
+    # Load the subparsers
+    print "Loading subparsers..."
+    parser = load_subparsers(config_dict, parser)
+
     args = parser.parse_args()
+
     # Import the right cloud provider
     provider = config_dict['provider']['name']
+    if args.smoke:
+        print "Initializing {} provider instance maker object..".format(provider)
     InstanceMaker = __import__("cloud_providers.{}.instance_maker".format(provider), fromlist=["blah"]).InstanceMaker
 
     # Get the meta information for the subcommand being run
@@ -21,11 +32,14 @@ def main():
     deployment_tool_meta_info = _get_meta_info(config_dict['deployment_tools'], deployment_tool_name)
 
     # import the right cloud_init_generator plugin
+    if args.smoke:
+        print "Initialzing the {} cloud init config generator".format(
+            vars(args)['deployment_tool_name'])
     CloudInitGenerator = __import__("deployment_tools.{}.cloud_init_generator".format(
         vars(args)['deployment_tool_name']), fromlist=["blah"]).CloudInitGenerator
 
     # Instantiating a CloudInitGenerator object
-    cloud_init_generator = CloudInitGenerator(args, deployment_tool_meta_info)
+    cloud_init_generator = CloudInitGenerator(config_dict, args, deployment_tool_meta_info)
 
     # Generate the cloud_init config string representation
     cloud_init_config_string = cloud_init_generator.generate_cloud_init()
@@ -35,7 +49,8 @@ def main():
                                    **config_dict['provider']['instance_info']
                                    )
     # Create the instance
-    instance_maker.create_instance()
+    if not args.smoke:
+        instance_maker.create_instance()
 
 
 def _get_meta_info(deployment_tools, deployment_tool_name):

@@ -1,4 +1,7 @@
 # OpenStackAIOBuilder user configuration file sample
+# Branch of the deployment_tool to use, if not specified,
+# master will be used.
+branch: "stable/mitaka"
 provider:
   name: "rackspace"
   auth_info:
