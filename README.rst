@@ -140,4 +140,7 @@ Features that it will include are:
   OpenStack-Ansible has a "bootstrap-aio.sh" script with many options that are configured through bash [environment]
   variables. These variables will be mapped to python options that can be consumed by the users of this tool. Options
   that are not specified should take on the defualt value of the original deployment script(i.e the bootstrap-aio.sh).
-* Subcommands for this tool should be the deployment tools that are avialable to use. For example:
+* Subcommands for this tool should be the deployment tools that are avialable to use.
+* Add in functionality for the server to "phone-home" once the openstack deployment is complete. I could do this either
+  by spawning a worker thread to listen for a GET request, or checking to see if the horizon dashboard is up
+  by continually checking AIO's port 443 or 80(depending on if it's SSL or not).
