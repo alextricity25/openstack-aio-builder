@@ -1,0 +1,33 @@
+# Any extra information about the deployment tool that the main program will use needs to be in here.
+# The name of the deployment tool. It must be the same as the name of the directory for this
+# deployment tool in the deployment_tools directory becuase it is also used to load
+# it's respective plugins
+# Required by the main program
+name: "example"
+
+# The URL to the github repository for this deployment tool
+# Required by the plugin
+github_repo: "example"
+
+# A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
+# Required by the main program
+shorthand_name: "ex"
+
+# The driver used to load options from this deployment tool
+# Required by the main program
+load_options_driver: "deployment_tools.template.load_options_driver"
+
+# The README explaining how to deploy an AIO with this deployment tool
+readme_file: "https://github.com/rcbops/rpc-openstack/blob/master/README.md"
+
+# The raw file of the deployment script(s)
+# Required by the plugin
+deployment_scripts_links:
+  - "https://raw.githubusercontent.com/rcbops/rpc-openstack/master/scripts/deploy.sh"
+
+
+# Description
+# Required by the main program
+description: |
+  The rpc-openstack repo includes add-ons for the Rackspace Private Cloud product that integrate with the
+  openstack-ansible set of Ansible playbooks and roles
