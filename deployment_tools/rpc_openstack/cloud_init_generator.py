@@ -66,7 +66,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         commands.append(self._prepare_option("DEPLOY_AIO", "yes"))
 
         # Make sure we are using git to get the OpenStack-Ansible roles
-        commands.append(self._prepare_option("ANSIBLE_ROLE_FETCH_MODE", "yes"))
+        commands.append(self._prepare_option("ANSIBLE_ROLE_FETCH_MODE", "git-clone"))
 
         # Export the branch name
         branch = self.config_dict['branch']
