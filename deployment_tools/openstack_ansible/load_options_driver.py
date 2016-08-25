@@ -52,7 +52,7 @@ def load_options(config_file_dict):
         with open("{}{}".format(OSA_TEMP_DIR, deployment_script)) as f:
             for line in f:
                 option_info = list()
-                result = re.search("^export ([_A-Z]+)=[\$\{\}_A-Z]+:-[\"\']([=\w\.\/-]*)[\"\']\}", line)
+                result = re.search("^export ([_A-Z]+)=[\$\{\}_A-Z]+:-[\"\']*([=\w\.\/-]*)[\"\']*\}", line)
                 if result:
                     option_info.append("--{}".format(result.group(1).lower()))
                     option_info.append(result.group(2))

@@ -48,6 +48,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         """
         cloud_init_skeleton = {
             "package_upgrade": "true",
+            # Kind of looks like "pancakes" when you're tired
             "pacakges": list(),
             "runcmd": list(),
             "output": { 'all': '| tee -a /var/log/cloud-init-output.log' }
