@@ -43,6 +43,11 @@ def main():
     # Generate the cloud_init config string representation
     cloud_init_config_string = cloud_init_generator.generate_cloud_init()
 
+    if args.smoke:
+        print "----CLOUD INIT CONFIG-----"
+        print cloud_init_config_string
+        print "--------------------------"
+
     instance_maker = InstanceMaker(args.instance_name, cloud_init_config_string,
                                    config_dict['provider']['auth_info'],
                                    **config_dict['provider']['instance_info']
