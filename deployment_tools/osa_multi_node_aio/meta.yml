@@ -1,0 +1,48 @@
+# Any extra information about the deployment tool that the main program will use needs to be in here.
+# The name of the deployment tool. It must be the same as the name of the directory for this
+# deployment tool in the deployment_tools directory becuase it is also used to load
+# it's respective plugins
+# Required by the main program
+name: "osa_multi_node_aio"
+
+# The URL to the github repository for this deployment tool
+# Required by the plugin
+github_repo: "https://github.com/openstack/openstack-ansible-ops.git"
+
+# A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
+# Required by the main program
+shorthand_name: "osa_multi_aio"
+
+# The driver used to load options from this deployment tool
+# Required by the main program
+load_options_driver: "deployment_tools.osa_multi_node_aio.load_options_driver"
+
+# What deployment scripts need to be run for an AIO to be built with this deployment tool
+# Required by the openstack-ansible's plugin.
+deployment_scripts:
+  - "/build.sh"
+
+# The README explaining how to deploy an AIO with this deployment tool
+readme_file: "https://github.com/openstack/openstack-ansible-ops/blob/master/multi-node-aio/README.rst"
+
+# Because the osa_multi_node plugin requires a beefy server,
+# not all flavors will work. Use the data dictionary below
+# to define supported flavors for each cloud service provider.
+# This is then used in the __init__.py file to verify the flavors
+# match up in the user config.
+supported_flavors:
+  rackspace:
+    - "onmetal-io1"
+    - "onmetal-io2"
+supported_images:
+  rackspace:
+    - "9dc2bf0a-7771-45cd-a7f9-ce86ce94c548"
+# Description
+# Required by the main program
+description: |
+  Full OpenStack deployment using a single OnMetal host from the Rackspace Public Cloud.
+  This is a multi-node installation using VMs that have been PXE booted which was done
+  to provide an environment that is almost exactly what is in production. This script
+  will build, kick and deploy OpenStack using KVM, Cobbler, OpenStack-Ansible within 13
+  Nodes and 1 load balancer all using a Hyper Converged environment. Requires a beefy bare
+  metal instance(i.e RAX OnMetal)
