@@ -41,7 +41,7 @@ config_file_dict = {
 }
 
 # Gets what's in the openstack_aio_builder, and the deployment tool's meta.yml file
-def get_conf():
+def get_conf(branch):
     """
     Get the configuration file
     :return: a dictionary representing all of the configs
@@ -65,8 +65,13 @@ def get_conf():
                     print "Cloud provider must be defined in the global configuration file!"
                     exit()
 
-                # Load branch name if present, if not present, branch will default to master
-                config_file_dict['branch'] = loaded_config.get('branch', 'master')
+                # Set branch to value provider in args. If no value was provided
+                # in args, then check the config. If no value is still to be found,
+                # default to master.
+                if branch:
+                    config_file_dict['branch'] = branch
+                else:
+                    config_file_dict['branch'] = loaded_config.get('branch', 'master')
 
                 # Check to see if the provider is supported
                 if config_file_dict["provider"]["name"] not in SUPPORTED_PROVIDERS:

@@ -3,17 +3,20 @@ import yaml
 from args import get_args_parser
 from args import load_subparsers
 from config import get_conf
+import sys
 import pprint
 
 
 def main():
+
+    branch = _get_branch_from_early_args(sys.argv)
 
     # Load base options, initialize parser object
     parser = get_args_parser()
 
     # Build the initial configuration dictonary.
     # Pass the parser because the load_options_driver might need some of it's information
-    config_dict = get_conf()
+    config_dict = get_conf(branch)
 
     # Load the subparsers
     parser = load_subparsers(config_dict, parser)
@@ -73,6 +76,16 @@ def _get_meta_info(deployment_tools, deployment_tool_name):
         if deployment_tool_name in deployment_tool['meta'].values():
             return deployment_tool['meta']
 
+def _get_branch_from_early_args(argv):
+    """
+    Catch some arguments early, this is because we don't want to wait
+    for parse_args to make these arguments available. i.e we need to
+    know the branch name of a repository before arg_parse because we use
+    it to load the repositories and determine the subparser's options.
+    """
+    if argv[1] == '--branch':
+        argv.pop(1)
+        return argv.pop(1)
 
 if __name__ == "__main__":
     main()
