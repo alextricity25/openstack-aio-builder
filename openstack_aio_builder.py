@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import yaml
 
 from args import get_args_parser

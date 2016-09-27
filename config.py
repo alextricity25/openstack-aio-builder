@@ -37,7 +37,9 @@ SUPPORTED_PROVIDERS = [
 # This is going to have to be shared across the whole project
 config_file_dict = {
     "provider": dict(),
-    "deployment_tools": list()
+    "deployment_tools": list(),
+    "post_deployment_commands": list(),
+    "pre_deployment_commands": list()
 }
 
 # Gets what's in the openstack_aio_builder, and the deployment tool's meta.yml file
@@ -77,6 +79,16 @@ def get_conf(branch):
                 if config_file_dict["provider"]["name"] not in SUPPORTED_PROVIDERS:
                     print "The provider {} is not supported".format(config_file_dict["provider"])
                     exit()
+
+                # Gather pre-deployment commands
+                if loaded_config.get('pre_deployment_commands', ''):
+                    config_file_dict['pre_deployment_commands'] = loaded_config['pre_deployment_commands']
+
+                # Gather post-deployment commands
+                if loaded_config.get('post_deployment_commands', ''):
+                    config_file_dict['post_deployment_commands'] = loaded_config['post_deployment_commands']
+
+
 
             # Load the deployment tools' meta.yml file into the config dictionary.
             _load_deployment_tools_meta(config_file_dict)
@@ -126,7 +138,7 @@ def _load_options_for_deployment_tool(config_file_dict):
         load_options = __import__(load_options_driver, fromlist=["blah"]).load_options
         deployment_tool['options'] = load_options(config_file_dict)
 
-def _find_meta_files(directory=os.getcwd()):
+def _find_meta_files(directory=os.path.dirname(__file__)):
     """
     Recursivly walk the directory, finding all meta.yml files.
     We need to read the meta files to find the deployment tool's name so we can map it to a subparser.

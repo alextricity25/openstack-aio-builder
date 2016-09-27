@@ -58,6 +58,10 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         # Adding required packages
         cloud_init_skeleton['packages'] = ['git', 'screen']
 
+        # Add pre-deployment commands
+        for command in self.config_dict.get('pre_deployment_commands', ''):
+            commands.append(command)
+
         # Create export commands out of the options given
         for option, value in vars(self.args).iteritems():
             commands.append(self._prepare_option(option, value))
@@ -85,6 +89,10 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         # Grabing AIO deployment scripts from metadata file
         for deployment_script in self.meta_info['deployment_scripts']:
             commands.append("cd /opt/openstack-ansible && .{}".format(deployment_script))
+
+        # Add post-deployment commands
+        for command in self.config_dict.get('post_deployment_commands', ''):
+            commands.append(command)
 
         cloud_init_skeleton['runcmd'] = commands
 

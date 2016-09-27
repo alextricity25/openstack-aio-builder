@@ -16,3 +16,13 @@ provider:
     image: "imagename"
     flavor: "flavor"
     key_name: "keyname"
+# Commands that will be run before openstack is deployed
+pre_deployment_commands:
+  - echo "test"
+  - echo "any command can go here"
+  - touch examplefile
+  - echo "testfile"  >> /tmp/examplefile
+# Commands that will be run after openstack is deployed
+post_deployment_commands:
+  - git status
+  - echo "test"
