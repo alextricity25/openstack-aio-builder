@@ -18,7 +18,7 @@ def main():
 
     # Build the initial configuration dictonary.
     # Pass the parser because the load_options_driver might need some of it's information
-    config_dict = get_conf(branch)
+    config_dict = get_conf(branch, sys.argv)
 
     # Load the subparsers
     parser = load_subparsers(config_dict, parser)

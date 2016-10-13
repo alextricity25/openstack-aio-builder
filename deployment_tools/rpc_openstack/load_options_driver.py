@@ -35,15 +35,18 @@ def load_options(config_file_dict):
         if current_branch != config_file_dict['branch']:
             git_checkout_command = ['git', 'checkout',
                                     config_file_dict['branch']]
-            git_checkout_p = subprocess.Popen(git_checkout_command, stdout=FNULL,
+            git_checkout_p = subprocess.Popen(git_checkout_command,
+                                              stdout=FNULL,
+                                              stderr=FNULL,
                                               cwd=RPCO_TEMP_DIR)
             git_checkout_p.wait()
-            if git_checkout_p.returncode:
-                print "{} failed with return code {}".format(
-                    " ".join(git_checkout_command),
-                    git_checkout_p.returncode
-                )
-                exit()
+            # TODO: See issue https://github.com/alextricity25/openstack-aio-builder/issues/2
+#            if git_checkout_p.returncode:
+#                print "{} failed with return code {}".format(
+#                    " ".join(git_checkout_command),
+#                    git_checkout_p.returncode
+#                )
+#                exit()
 
     else:
         _get_repository(config_file_dict, meta_info)

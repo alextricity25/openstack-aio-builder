@@ -39,6 +39,8 @@ def load_options(config_file_dict):
                                       stderr=FNULL,
                                       cwd=OSA_TEMP_DIR)
     git_checkout_p.wait()
+
+    FNULL.close()
 #    if git_checkout_p.returncode:
 #        print "'{}' failed with return code {}".format(
 #            " ".join(git_checkout_command),

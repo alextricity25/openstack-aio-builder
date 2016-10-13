@@ -43,7 +43,7 @@ config_file_dict = {
 }
 
 # Gets what's in the openstack_aio_builder, and the deployment tool's meta.yml file
-def get_conf(branch):
+def get_conf(branch, argv):
     """
     Get the configuration file
     :return: a dictionary representing all of the configs
@@ -53,15 +53,21 @@ def get_conf(branch):
     for config_file in CONFIG_FILES:
         # If file is not found, try next one
         config_file_path = os.path.expanduser(config_file)
+        if '--smoke' in argv:
+            print "Attempting to read config file {}".format(config_file_path)
         if not os.path.isfile(config_file_path):
             continue
         else:
+            if '--smoke' in argv:
+                print "Config file {} found. Using that one".format(config_file_path)
             with open(config_file_path, 'r') as f:
                 loaded_config = yaml.safe_load(f)
 
                 # Loading cloud provider
                 try:
                     config_file_dict["provider"] = loaded_config["provider"]
+                    if '--smoke' in argv:
+                        print "Using {} provider".format(config_file_dict['provider'])
                 except KeyError:
                     # TODO: I should raise the proper exceptions here.
                     print "Cloud provider must be defined in the global configuration file!"
@@ -75,6 +81,10 @@ def get_conf(branch):
                 else:
                     config_file_dict['branch'] = loaded_config.get('branch', 'master')
 
+                # Print branch name if smoke flag is given
+                if '--smoke' in argv:
+                    print "Using branch: {}".format(config_file_dict['branch'])
+
                 # Check to see if the provider is supported
                 if config_file_dict["provider"]["name"] not in SUPPORTED_PROVIDERS:
                     print "The provider {} is not supported".format(config_file_dict["provider"])
@@ -87,8 +97,6 @@ def get_conf(branch):
                 # Gather post-deployment commands
                 if loaded_config.get('post_deployment_commands', ''):
                     config_file_dict['post_deployment_commands'] = loaded_config['post_deployment_commands']
-
-
 
             # Load the deployment tools' meta.yml file into the config dictionary.
             _load_deployment_tools_meta(config_file_dict)
