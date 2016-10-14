@@ -36,16 +36,16 @@ def load_options(config_file_dict):
     git_checkout_command = ['git', 'checkout', config_file_dict['branch']]
     git_checkout_p = subprocess.Popen(git_checkout_command,
                                       stdout=FNULL,
-                                      stderr=FNULL,
                                       cwd=OSA_TEMP_DIR)
     git_checkout_p.wait()
+    if git_checkout_p.returncode:
+        print "'{}' failed with return code {}".format(
+            " ".join(git_checkout_command),
+            git_checkout_p.returncode
+        )
+        exit()
 
     FNULL.close()
-#    if git_checkout_p.returncode:
-#        print "'{}' failed with return code {}".format(
-#            " ".join(git_checkout_command),
-#            git_checkout_p.returncode
-#        )
 
     # Read in each file, parsing out each variable that starts with "export".
     # This is my rule: any bash variable exported to the environment is a configurable option for osa AIO,
