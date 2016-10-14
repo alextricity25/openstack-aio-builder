@@ -55,15 +55,19 @@ def load_options(config_file_dict):
     git_submodule_update_command = ['git',
                                     'submodule',
                                     'update']
-    git_submodule_update_p = subprocess.Popen(git_submodule_update_command,
-                                              stdout=FNULL,
-                                              cwd=RPCO_TEMP_DIR)
-    git_submodule_update_p.wait()
-    if git_submodule_update_p.returncode:
-        print "'{}' failed with return code {}".format(
-            " ".join(git_submodule_update_command),
-            git_submodule_update_p.returncode
-        )
+
+    try:
+        git_submodule_update_p = subprocess.Popen(git_submodule_update_command,
+                                                  stdout=FNULL,
+                                                  cwd=RPCO_TEMP_DIR)
+        git_submodule_update_p.wait()
+        if git_submodule_update_p.returncode:
+            print "'{}' failed with return code {}".format(
+                " ".join(git_submodule_update_command),
+                git_submodule_update_p.returncode
+            )
+    except OSError:
+        print "Skipping RPCO plugin..."
 
     FNULL.close()
 
@@ -71,15 +75,18 @@ def load_options(config_file_dict):
     # This is my rule: any bash variable exported to the environment is a configurable option for rpco AIO,
     # with defaults set to the bash variable's value defined in the deployment script.
     for deployment_script in meta_info['deployment_scripts']:
-        with open("{}{}".format(RPCO_TEMP_DIR, deployment_script)) as f:
-            for line in f:
-                option_info = list()
-                result = re.search("^export ([_A-Z]+)=[\$\{\}_A-Z]+:-[\"\']*([=\w\.\/-]*)[\"\']*\}", line)
-                if result:
-                    option_info.append("--{}".format(result.group(1).lower()))
-                    option_info.append(result.group(2))
-                    option_info.append("For a description, see RPCO README")
-                    options_list.append(option_info)
+        try:
+            with open("{}{}".format(RPCO_TEMP_DIR, deployment_script)) as f:
+                for line in f:
+                    option_info = list()
+                    result = re.search("^export ([_A-Z]+)=[\$\{\}_A-Z]+:-[\"\']*([=\w\.\/-]*)[\"\']*\}", line)
+                    if result:
+                        option_info.append("--{}".format(result.group(1).lower()))
+                        option_info.append(result.group(2))
+                        option_info.append("For a description, see RPCO README")
+                        options_list.append(option_info)
+        except IOError:
+            print "Skipping RPCO plugin.."
 
     return options_list
 
@@ -106,34 +113,38 @@ def _get_repository(config_file_dict, meta_info):
                          config_file_dict['branch'],
                          meta_info['github_repo'],
                          RPCO_TEMP_DIR]
-    git_clone_p = subprocess.Popen(git_clone_command, stdout=FNULL)
+    git_clone_p = subprocess.Popen(git_clone_command,
+                                   stdout=FNULL,
+                                   stderr=FNULL)
     git_clone_p.wait()
+    # TODO: See issue https://github.com/alextricity25/openstack-aio-builder/issues/2
     if git_clone_p.returncode:
         print "'{}' failed with return code {}".format(
             " ".join(git_clone_command),
             git_clone_p.returncode
         )
-        exit()
-
-        # TODO: I need to figure out a better way of loading options so I don't have
-        # to load all of the plugins, but just the one being used.
-        #    git_checkout_p.wait()
-        #    if git_checkout_p.returncode:
-        #        print "'{}' failed with return code {}".format(
-        #            " ".join(git_checkout_command),
-        #            git_checkout_p.returncode
-        #        )
+        print "Skipping plugin.."
 
     # Update the submodule, just in case it might be old.
     git_submodule_update_command = ['git',
                                     'submodule',
                                     'update']
-    git_submodule_update_p = subprocess.Popen(git_submodule_update_command,
-                                              stdout=FNULL,
-                                              cwd=RPCO_TEMP_DIR)
-    git_submodule_update_p.wait()
-    if git_submodule_update_p.returncode:
-        print "'{}' failed with return code {}".format(
-            " ".join(git_submodule_update_command),
-            git_submodule_update_p.returncode
-        )
+
+    # TODO: Instead of cloning all of the deployment tool's repos,
+    # find a way to clone the one being used only.
+    try:
+        git_submodule_update_p = subprocess.Popen(git_submodule_update_command,
+                                                  stdout=FNULL,
+                                                  stderr=FNULL,
+                                                  cwd=RPCO_TEMP_DIR)
+        git_submodule_update_p.wait()
+        if git_submodule_update_p.returncode:
+            print "'{}' failed with return code {}".format(
+                " ".join(git_submodule_update_command),
+                git_submodule_update_p.returncode
+            )
+            print "Skipping RPCO submodule update.."
+
+    except OSError:
+        print "Skipping the RPCO cloning..."
+
