@@ -81,10 +81,18 @@ def get_conf(branch, argv):
                     config_file_dict['post_deployment_commands'] = loaded_config['post_deployment_commands']
 
             # Find DP shorthand name from command line
-            # Iterate through the list, starting from the end
-            # Find first argument without "--" in front of it.
-            for argument in argv[::-1]:
-                if "--" in argument:
+            # Iterate through the list of arguments, starting from
+            # the second entry to exclude the program name. Then
+            # find the first argument with out a "--". That argument
+            # should always be the DP shorthand name given by the user.
+            skip = False
+            for idx, argument in enumerate(argv[1:]):
+                if skip:
+                    # Ensure we don't skip another iteration
+                    skip = False
+                    continue
+                if "--" in argument or "-" in argument:
+                    skip = True
                     continue
                 else:
                     dp_shorthand_name = argument
@@ -145,6 +153,7 @@ def _load_options_for_deployment_tool(config_file_dict):
         load_options_driver = meta_info['load_options_driver']
         load_options = __import__(load_options_driver, fromlist=["blah"]).load_options
         deployment_tool['options'] = load_options(config_file_dict)
+
 
 def _find_meta_files(directory=os.path.dirname(__file__), shorthand_name_filter=None):
     """
