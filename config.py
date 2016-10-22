@@ -22,16 +22,30 @@ config_file_dict = {
 }
 
 # Gets what's in the openstack_aio_builder, and the deployment tool's meta.yml file
-def get_conf(branch, argv):
+def get_conf(argv):
     """
-    Get the configuration file
+
+    TODO: Move the code to find the branch name from the command line here.
+    :param argv: list() - A list of the command line agruments. This is used to find the deployment tool
+                 that is being used. In addition, it's used to figure out if the command
+                 is being run with the '--smoke' flag.
+                 NOTE: There might be some confusion as to why the argument list is inspected here,
+                       rather than just using arparse. This is because the program needs to know
+                       information given on the command line before ArgumentParser.parse_args() is called.
+                       The information gathered from the command line here effects how the ArgumentParser
+                       object is constructed. Also, I havn't been able to figure out a way to change the
+                       ArgumentParser object once the arguments have been processed by the parse_args()
+                       method.
     :return: a dictionary representing all of the configs
     """
+
+    # Retrieve branch name from arguments
+    branch = _get_branch_from_args(argv)
 
     # Set variable to true if smoke flag is detected
     is_smoke = '--smoke' in argv
 
-    # Find args so they can be passed to the load_options_driver
+    # Read in user configuration file
     for config_file in CONFIG_FILES:
         # If file is not found, try next one
         config_file_path = os.path.expanduser(config_file)
@@ -44,7 +58,6 @@ def get_conf(branch, argv):
                 print "Config file {} found. Using that one".format(config_file_path)
             with open(config_file_path, 'r') as f:
                 loaded_config = yaml.safe_load(f)
-
                 # Loading cloud provider
                 try:
                     config_file_dict["provider"] = loaded_config["provider"]
@@ -86,6 +99,7 @@ def get_conf(branch, argv):
             # find the first argument with out a "--". That argument
             # should always be the DP shorthand name given by the user.
             skip = False
+            dp_shorthand_name=""
             for idx, argument in enumerate(argv[1:]):
                 if skip:
                     # Ensure we don't skip another iteration
@@ -98,10 +112,7 @@ def get_conf(branch, argv):
                     dp_shorthand_name = argument
                     break
 
-            if not dp_shorthand_name:
-                print "ERROR: Unable to find shorthand name of deployment tool on command line!"
-                exit()
-            elif is_smoke:
+            if is_smoke:
                 print "Shorthand name found: {}".format(dp_shorthand_name)
 
             # Load the deployment tools' meta.yml file into the config dictionary.
@@ -185,3 +196,14 @@ def _find_meta_files(directory=os.path.dirname(__file__), shorthand_name_filter=
                     meta_files.append(loaded_meta_file)
 
     return meta_files
+
+def _get_branch_from_args(argv):
+    """
+    Catch some arguments early, this is because we don't want to wait
+    for parse_args to make these arguments available. i.e we need to
+    know the branch name of a repository before arg_parse because we use
+    it to load the repositories and determine the subparser's options.
+    """
+    if argv[1] == '--branch':
+        argv.pop(1)
+        return argv.pop(1)

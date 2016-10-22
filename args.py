@@ -9,6 +9,13 @@ from config import get_conf
 
 BASE_OPTIONS = [
     {
+        "name": "--branch",
+        "required": False,
+        "default": "master",
+        "help": "The branch of the deployment tool to use",
+        "action": "store_true"
+    },
+    {
         "name": "--instance-name",
         "required": True,
         "help": "The name of the instance being spawned"
@@ -31,10 +38,7 @@ def get_args_parser():
 
     # Load base options
     for base_option_dict in BASE_OPTIONS:
-        # This is because we are invoking the get_args_parser method twice, and
-        # BASE_OPTIONS[index]['name'] would already have been pop'ed out.
-        if base_option_dict.get('name', ''):
-            parser.add_argument(base_option_dict.pop("name"), **base_option_dict)
+        parser.add_argument(base_option_dict.pop("name"), **base_option_dict)
 
     # Load the subparsers
     #_load_subparsers(config_file_dict, parser)
