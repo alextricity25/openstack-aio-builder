@@ -16,36 +16,6 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         self.meta_info = meta_info
 
     def generate_cloud_init(self):
-        """
-        How should this plugin generate the cloud_init file?
-        Maybe the cloud_init file for rpc_openstack should look like:
-
-        package_upgrade: true
-        packages:
-          - git-core
-          - screen
-          - vim
-          {% for package in kwargs['extra_packages'] %}
-          - {{ package }}
-          {% endfor %}
-
-        runcmd:
-          {% for option in args.subparser['rpco'].get_options() %}
-          - export {{ option.key }}={{ option.value }}
-          {% endfor %}
-          {% for extra_option in kwargs['extra_options'] %}
-          - export {{ extra_option.key }}={{ extra_option.value }}
-          {% endfor %}
-          {% for extra_pre_command in kwargs['extra_pre_commands'] %}
-          - extra_pre_command
-          {% endfor %}
-          - git clone -b ${args.TAG} --recursive ${meta.github_repo} /opt/rpc-openstack
-          {% for deployment_script in meta.deployment_scripts %}
-          - cd /opt/rpc-openstack && {{ deployment_script }}
-          {% endfor %}
-        output: { all: '| tee -a /var/log/cloud-init-output.log' }
-        :return:
-        """
         cloud_init_skeleton = {
             "package_upgrade": "true",
             # Kind of looks like "pancakes" when you're tired

@@ -31,7 +31,6 @@ def main():
     InstanceMaker = __import__("cloud_providers.{}.instance_maker".format(provider), fromlist=["blah"]).InstanceMaker
 
     # Get the meta information for the subcommand being run
-    print vars(args)
     deployment_tool_name = vars(args)['deployment_tool_name']
     deployment_tool_meta_info = _get_meta_info(config_dict['deployment_tools'], deployment_tool_name)
 

@@ -17,8 +17,6 @@ def load_options(config_file_dict):
     # If the repo already exists, print out a warning informing the user that it
     # might be outdated
     if os.path.isdir(OSA_TEMP_DIR):
-        #print ("WARNING: {} already exists, and could be outdated. If you want to pull in the latest"
-                #" codebase, delete the directory").format(OSA_TEMP_DIR)
         pass
         #TODO: Make an option that will force delete OSA_TEMP_DIR
         #shutil.rmtree(OSA_TEMP_DIR)
