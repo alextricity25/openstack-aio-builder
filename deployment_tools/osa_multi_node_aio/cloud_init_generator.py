@@ -13,17 +13,18 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         """
         BaseCloudInitGenerator.__init__(self, config_dict, args)
 
+        # Verify the user is using a supported flavor
+        self._verify_supported_flavors()
+
+        # Verify the user is using a supported image
+        self._verify_supported_image()
+
         self.meta_info = meta_info
 
     def generate_cloud_init(self):
         """
         :return: string representing the cloud_init config
         """
-        # Verify the user is using a supported flavor
-        self._verify_supported_flavors()
-
-        # Verify the user is using a supported image
-        self._verify_supported_image()
 
         cloud_init_skeleton = {
             "package_upgrade": "true",

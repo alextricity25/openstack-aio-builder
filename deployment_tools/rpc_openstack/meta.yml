@@ -33,6 +33,25 @@ readme_file: "https://github.com/rcbops/rpc-openstack/blob/master/README.md"
 deployment_scripts_links:
   - "https://raw.githubusercontent.com/rcbops/rpc-openstack/master/scripts/deploy.sh"
 
+# Not all flavors have the correct amount of disk space needed to run rpc-openstack
+# Below is a list of supported flavors for each provider. The cloud_init_generator
+# will check against these supported flavors and cause the program to fail if
+# the user is not using a supported flavor for the corresponding cloud provider.
+# If the use doesn't provide a flavor or an image, the first entry in the list will
+# be used.
+# Required by the plugin.
+supported_flavors:
+  rackspace:
+    - "performance1-8"
+    - "performance2-15"
+    - "performance2-30"
+    - "performance2-60"
+    - "performance2-90"
+# Only the Ubuntu 14.04 image is supported with RPCO currently
+supported_images:
+  rackspace:
+    - "8e7bdecd-380a-43d7-af9a-ec4f4df51dbd"
+
 
 # Description
 # Required by the main program

@@ -13,6 +13,12 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         """
         BaseCloudInitGenerator.__init__(self, config_dict, args)
 
+        # Verify the user is using a supported flavor
+        self._verify_supported_flavors()
+
+        # Verify the user is using a supported image
+        self._verify_supported_image()
+
         self.meta_info = meta_info
 
     def generate_cloud_init(self):
@@ -74,3 +80,45 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         :return: A string representation of how the options will be exported the the system environment
         """
         return "export {}={}".format(option_name.upper(), option_value)
+
+    def _verify_supported_flavors(self):
+        """
+        """
+        flavor = self.config_dict['provider']['instance_info']['flavor']
+        supported_flavors = self.meta_info['supported_flavors']
+        if self.args.smoke:
+            print "The flavor configured is: {}".format(
+                flavor
+            )
+        for key, value in supported_flavors.items():
+            if type(value) is list:
+                for _flavor in value:
+                    if _flavor == flavor:
+                        return True
+
+        print "{} is not a supported flavor for this deployment tool!".format(
+            flavor
+        )
+        print "The supported flavors are {}".format(supported_flavors.values())
+        exit()
+
+
+    def _verify_supported_image(self):
+        """"""
+        image = self.config_dict['provider']['instance_info']['image']
+        supported_images = self.meta_info['supported_images']
+        if self.args.smoke:
+            print "The image conifgured is: {}".format(
+                image
+            )
+        for key, value in supported_images.items():
+            if type(value) is list:
+                for _image in value:
+                    if _image == image:
+                        return True
+
+        print "{} is not a supported image for this deployment tool!".format(
+            image
+        )
+        print "The supported images are {}".format(supported_images.values())
+        exit()
