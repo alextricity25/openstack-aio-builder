@@ -12,14 +12,11 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         :param kwargs: Any arbitrary kwargs that can extend this plugin's functionality.
         """
         BaseCloudInitGenerator.__init__(self, config_dict, args)
-
+        self.meta_info = meta_info
         # Verify the user is using a supported flavor
         self._verify_supported_flavors()
-
         # Verify the user is using a supported image
         self._verify_supported_image()
-
-        self.meta_info = meta_info
 
     def generate_cloud_init(self):
         cloud_init_skeleton = {
