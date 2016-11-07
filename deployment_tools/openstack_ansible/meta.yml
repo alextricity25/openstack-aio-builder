@@ -33,6 +33,20 @@ readme_file: "https://raw.githubusercontent.com/openstack/openstack-ansible/mast
 #  - "https://raw.githubusercontent.com/openstack/openstack-ansible/master/scripts/bootstrap-aio.sh"
 #  - "https://raw.githubusercontent.com/openstack/openstack-ansible/master/scripts/run-playbooks.sh"
 
+# Not all flavors have the correct amount of disk space needed to run openstack-ansible.
+# Below is a list of supported flavors for each provider. The cloud_init_generator
+# will check against these supported flavors. If the use doesn't provide a flavor or an
+# image, the first entry in the list will be used.
+# Required by the plugin
+supported_flavors:
+  rackspace:
+    - "8"
+# OpenStack-Ansible only supports a Ubuntu 14.04 image
+# Required by the plugin
+supported_images:
+ rackspace:
+    - "8e7bdecd-380a-43d7-af9a-ec4f4df51dbd"
+
 description: |
   OpenStack-Ansible is an official OpenStack project which aims to deploy production environments from source in a
   way that makes it scalable while also being simple to operate, upgrade, and grow.
