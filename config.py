@@ -99,8 +99,10 @@ def get_conf(argv):
             # find the first argument with out a "--". That argument
             # should always be the DP shorthand name given by the user.
             skip = False
-            dp_shorthand_name=""
+            dp_shorthand_name = ""
             for idx, argument in enumerate(argv[1:]):
+                if "--smoke" == argument:
+                    continue
                 if skip:
                     # Ensure we don't skip another iteration
                     skip = False

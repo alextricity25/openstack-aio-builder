@@ -93,12 +93,17 @@ class CloudInitGenerator(BaseCloudInitGenerator):
                     if _flavor == flavor:
                         return True
 
+        # Flavor given is not a supported flavor, using the first
+        # flavor defined as a supported flavor for this particular
+        # cloud provider
+        new_flavor = self.meta_info['supported_flavors'] \
+                               [self.config_dict['provider']['name']][0]
+
         print "{} is not a supported flavor for this deployment tool!".format(
             flavor
         )
         print "The supported flavors are {}".format(supported_flavors.values())
-        exit()
-
+        print "Using {} flavor instead.".format(new_flavor)
 
     def _verify_supported_image(self):
         """"""
