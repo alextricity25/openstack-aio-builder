@@ -17,7 +17,7 @@ BASE_OPTIONS = [
     },
     {
         "name": "--instance-name",
-        "required": True,
+        "required": False,
         "help": "The name of the instance being spawned"
     },
     {
@@ -26,6 +26,13 @@ BASE_OPTIONS = [
         "default": False,
         "action": "store_true",
         "help": "Run program as if it were normally run, but with debug messages and don't actually create the instance"
+    },
+    {
+        "name": "--glimpse",
+        "required": False,
+        "default": False,
+        "action": "store_true",
+        "help": "Get a glimpse"
     }
 ]
 

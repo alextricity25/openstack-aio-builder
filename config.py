@@ -24,19 +24,7 @@ config_file_dict = {
 # Gets what's in the openstack_aio_builder, and the deployment tool's meta.yml file
 def get_conf(argv):
     """
-
-    TODO: Move the code to find the branch name from the command line here.
-    :param argv: list() - A list of the command line agruments. This is used to find the deployment tool
-                 that is being used. In addition, it's used to figure out if the command
-                 is being run with the '--smoke' flag.
-                 NOTE: There might be some confusion as to why the argument list is inspected here,
-                       rather than just using arparse. This is because the program needs to know
-                       information given on the command line before ArgumentParser.parse_args() is called.
-                       The information gathered from the command line here effects how the ArgumentParser
-                       object is constructed. Also, I havn't been able to figure out a way to change the
-                       ArgumentParser object once the arguments have been processed by the parse_args()
-                       method.
-    :return: a dictionary representing all of the configs
+    DOCUMENT THIS
     """
 
     # Retrieve branch name from arguments
@@ -204,7 +192,7 @@ def _get_branch_from_args(argv):
     Catch some arguments early, this is because we don't want to wait
     for parse_args to make these arguments available. i.e we need to
     know the branch name of a repository before arg_parse because we use
-    it to load the repositories and determine the subparser's options.
+    it to load the repositories and determine the subparser options.
     """
     if argv[1] == '--branch':
         argv.pop(1)

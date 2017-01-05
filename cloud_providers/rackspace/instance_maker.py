@@ -1,10 +1,6 @@
-from keystoneauth1 import loading
-from keystoneauth1 import session
-from novaclient import client
 from ..instance_maker import BaseInstanceMaker
 from get_client import get_client
 
-# This InstanceMaker class can be shared across all cloud providers
 class InstanceMaker(BaseInstanceMaker):
 
     def __init__(self, name, cloud_init_config, auth_info, **instance_info):

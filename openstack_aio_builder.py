@@ -8,6 +8,22 @@ from config import get_conf
 import sys
 import pprint
 
+def run_glimpse(config_dict):
+
+    provider_name = config_dict['provider']['name']
+    try:
+        regex_pattern = config_dict['provider']['glimpse']['regex']
+    except KeyError:
+        print "Glimpse is not configured correctly in the user config file!"
+        exit()
+
+    Glimpse = __import__("cloud_providers.{}.glimpse".format(provider_name),
+                         fromlist=["blah"]).Glimpse
+    Glimpse(config_dict['provider']['auth_info'],
+            regex_pattern).glimpse()
+
+    # No need to continue execution
+    exit()
 
 def main():
 
@@ -16,13 +32,17 @@ def main():
     parser = get_args_parser()
 
     # Build the initial configuration dictonary.
-    # Pass the parser because the load_options_driver might need some of it's information
     config_dict = get_conf(sys.argv)
+
+    # Run glimpse if argument was specified
+    if '--glimpse' in sys.argv:
+        run_glimpse(config_dict)
 
     # Load the subparsers
     parser = load_subparsers(config_dict, parser)
 
     args = parser.parse_args()
+
 
     # Import the right cloud provider
     provider = config_dict['provider']['name']
