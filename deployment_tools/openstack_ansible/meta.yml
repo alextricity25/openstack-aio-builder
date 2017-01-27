@@ -41,11 +41,14 @@ readme_file: "https://raw.githubusercontent.com/openstack/openstack-ansible/mast
 supported_flavors:
   rackspace:
     - "8"
-# OpenStack-Ansible only supports a Ubuntu 14.04 image
+
 # Required by the plugin
 supported_images:
  rackspace:
+ # Ubuntu 14.04
     - "8e7bdecd-380a-43d7-af9a-ec4f4df51dbd"
+ # Ubuntu 16.04
+    - "821ba5f4-712d-4ec8-9c65-a3fa4bc500f9"
 
 description: |
   OpenStack-Ansible is an official OpenStack project which aims to deploy production environments from source in a

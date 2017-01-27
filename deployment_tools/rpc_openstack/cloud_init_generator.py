@@ -30,11 +30,15 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         commands = list()
 
         # Adding required packages
-        cloud_init_skeleton['packages'] = ['git', 'screen']
+        cloud_init_skeleton['packages'] = ['git', 'screen', 'tmux']
+
+        # Create the tmux session
+        commands.append("tmux new-session -d -s deploy")
+        commands.append("tmux select-pane -t 0")
 
         # Run pre-deployment commands
         for command in self.config_dict.get('pre_deployment_commands', ''):
-            commands.append(command)
+            commands.append("tmux send-keys '{}' C-m".format(command))
 
         # Create export commands out of the options given
         for option, value in vars(self.args).iteritems():
@@ -42,6 +46,9 @@ class CloudInitGenerator(BaseCloudInitGenerator):
 
         # Make sure we are ALWAYS deploying an AIO
         commands.append(self._prepare_option("DEPLOY_AIO", "yes"))
+
+        # Set the HOME variable, because cloud-init in 16.04 is stupid
+        commands.append(self._prepare_option("HOME", "/root"))
 
         # Make sure we are using git to get the OpenStack-Ansible roles
         commands.append(self._prepare_option("ANSIBLE_ROLE_FETCH_MODE", "git-clone"))
@@ -52,16 +59,16 @@ class CloudInitGenerator(BaseCloudInitGenerator):
 
         # Clone the rpc-openstack repository
         # The branch value is loaded as an argparse argument in load_options_driver
-        commands.append("git clone -b $BRANCH --recursive {} /opt/rpc-openstack".format(
+        commands.append("tmux send-keys 'git clone -b $BRANCH --recursive {} /opt/rpc-openstack' C-m".format(
             self.meta_info['github_repo']))
         # TODO: pull these script paths from the metadata file
 
         for deployment_script in self.meta_info['deployment_scripts']:
-            commands.append("cd /opt/rpc-openstack && .{}".format(deployment_script))
+            commands.append("tmux send-keys 'cd /opt/rpc-openstack && .{}' C-m".format(deployment_script))
 
         # Run post-deployment commands
         for command in self.config_dict.get('post_deployment_commands', ''):
-            commands.append(command)
+            commands.append("tmux send-keys '{}' C-m".format(command))
 
         cloud_init_skeleton['runcmd'] = commands
 
@@ -76,7 +83,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         :param option_value: The value of the option
         :return: A string representation of how the options will be exported the the system environment
         """
-        return "export {}={}".format(option_name.upper(), option_value)
+        return "tmux send-keys 'export {}={}' C-m".format(option_name.upper(), option_value)
 
     def _verify_supported_flavors(self):
         """
