@@ -70,6 +70,8 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         for command in self.config_dict.get('post_deployment_commands', ''):
             commands.append("tmux send-keys '{}' C-m".format(command))
 
+        commands.append("tmux send-keys 'echo DONE' C-m")
+
         cloud_init_skeleton['runcmd'] = commands
 
         return "#cloud-config\n{}".format(yaml.dump(cloud_init_skeleton))
