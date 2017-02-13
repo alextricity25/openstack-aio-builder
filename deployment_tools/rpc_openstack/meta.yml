@@ -17,6 +17,12 @@ github_repo: "https://github.com/rcbops/rpc-openstack"
 deployment_scripts:
   - "/scripts/deploy.sh"
 
+# Any extra files that may contain environment variables specific to
+# deploying openstack. For example, a file that is sourced by the
+# main deployment script can be included here.
+extra_options_files:
+  - "/scripts/functions.sh"
+
 # A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
 # Required by the main program
 shorthand_name: "rpco"

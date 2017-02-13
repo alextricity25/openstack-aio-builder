@@ -11,8 +11,6 @@ FNULL = open(os.devnull, 'w')
 
 def load_options(config_file_dict):
 
-
-
     meta_info = _find_rpco_meta_info(config_file_dict)
     options_list = list()
 
@@ -53,7 +51,8 @@ def load_options(config_file_dict):
     # This is my rule: any bash variable exported to the environment is a
     # configurable option for rpco AIO, with defaults set to the bash variable's
     # value defined in the deployment script.
-    for deployment_script in meta_info['deployment_scripts']:
+    option_scripts = meta_info['deployment_scripts'] + meta_info['extra_options_files']
+    for deployment_script in option_scripts:
         with open("{}{}".format(RPCO_TEMP_DIR, deployment_script)) as f:
             for line in f:
                 option_info = list()
@@ -62,9 +61,10 @@ def load_options(config_file_dict):
                     option_info.append("--{}".format(result.group(1).lower()))
                     option_info.append(result.group(2))
                     option_info.append("For a description, see RPCO README")
-                    options_list.append(option_info)
+                    if option_info not in options_list:
+                        options_list.append(option_info)
 
-    return options_list
+    return list(options_list)
 
 
 
