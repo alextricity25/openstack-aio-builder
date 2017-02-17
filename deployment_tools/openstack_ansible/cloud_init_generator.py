@@ -19,36 +19,6 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         self._verify_supported_image()
 
     def generate_cloud_init(self):
-        """
-        How should this plugin generate the cloud_init file?
-        Maybe the cloud_init file for openstack-ansible should look like:
-
-        package_upgrade: true
-        packages:
-          - git-core
-          - screen
-          - vim
-          {% for package in kwargs['extra_packages'] %}
-          - {{ package }}
-          {% endfor %}
-
-        runcmd:
-          {% for option in args.subparser['osa'].get_options() %}
-          - export {{ option.key }}={{ option.value }}
-          {% endfor %}
-          {% for extra_option in kwargs['extra_options'] %}
-          - export {{ extra_option.key }}={{ extra_option.value }}
-          {% endfor %}
-          {% for extra_pre_command in kwargs['extra_pre_commands'] %}
-          - extra_pre_command
-          {% endfor %}
-          - git clone -b ${args.TAG} ${meta.github_repo} /opt/openstack-ansible
-          {% for deployment_script in meta.deployment_scripts %}
-          - cd /opt/openstack-ansible && {{ deployment_script }}
-          {% endfor %}
-        output: { all: '| tee -a /var/log/cloud-init-output.log' }
-        :return:
-        """
         cloud_init_skeleton = {
             "package_upgrade": "true",
             "pacakges": list(),
@@ -59,11 +29,15 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         commands = list()
 
         # Adding required packages
-        cloud_init_skeleton['packages'] = ['git', 'screen']
+        cloud_init_skeleton['packages'] = ['git', 'screen', 'tmux']
+
+        # Create the tmux session
+        commands.append("tmux new-session -d -s deploy")
+        commands.append("tmux select-pane -t 0")
 
         # Add pre-deployment commands
         for command in self.config_dict.get('pre_deployment_commands', ''):
-            commands.append(command)
+            commands.append("tmux send-keys '{}' C-m".format(command))
 
         # Create export commands out of the options given
         for option, value in vars(self.args).iteritems():
@@ -86,16 +60,19 @@ class CloudInitGenerator(BaseCloudInitGenerator):
 
         # Clone the openstack-ansible repository
         # The branch value is loaded as an argparse argument in load_options_driver
-        commands.append("git clone -b $BRANCH {} /opt/openstack-ansible".format(
+        commands.append("tmux send-keys 'git clone -b $BRANCH {} /opt/openstack-ansible' C-m".format(
             self.meta_info['github_repo']))
 
         # Grabing AIO deployment scripts from metadata file
-        for deployment_script in self.meta_info['deployment_scripts']:
-            commands.append("cd /opt/openstack-ansible && .{}".format(deployment_script))
+        commands.append("tmux send-keys 'cd /opt/openstack-ansible && .{}' C-m".format(
+            '&& .'.join(self.meta_info['deployment_scripts'])))
 
         # Add post-deployment commands
         for command in self.config_dict.get('post_deployment_commands', ''):
-            commands.append(command)
+            commands.append("tmux send-keys '{}' C-m".format(command))
+
+        # DONE!
+        commands.append("tmux send-keys 'echo DONE' C-m")
 
         cloud_init_skeleton['runcmd'] = commands
 
@@ -110,7 +87,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         :param option_value: The value of the option
         :return: A string representation of how the options will be exported the the system environment
         """
-        return "export {}={}".format(option_name.upper(), option_value)
+        return "tmux send-keys 'export {}={}' C-m".format(option_name.upper(), option_value)
 
     def _verify_supported_flavors(self):
         """

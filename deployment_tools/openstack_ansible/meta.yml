@@ -40,6 +40,7 @@ readme_file: "https://raw.githubusercontent.com/openstack/openstack-ansible/mast
 # Required by the plugin
 supported_flavors:
   rackspace:
+    - "performance2-30"
     - "8"
 
 # Required by the plugin
