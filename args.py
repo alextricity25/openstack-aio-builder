@@ -33,6 +33,11 @@ BASE_OPTIONS = [
         "default": False,
         "action": "store_true",
         "help": "Get a glimpse"
+    },
+    {
+        "name": "--image",
+        "required": False,
+        "help": "Image to use for the cloud VM"
     }
 ]
 

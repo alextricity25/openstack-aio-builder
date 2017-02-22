@@ -74,6 +74,7 @@ def main():
 
     instance_maker = InstanceMaker(args.instance_name, cloud_init_config_string,
                                    config_dict['provider']['auth_info'],
+                                   vm_image=args.image,
                                    **config_dict['provider']['instance_info']
                                    )
     # Create the instance

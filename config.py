@@ -10,7 +10,8 @@ CONFIG_FILES = [
 ]
 
 SUPPORTED_PROVIDERS = [
-    "rackspace"
+    "rackspace",
+    "openstack"
 ]
 
 # This is going to have to be shared across the whole project
