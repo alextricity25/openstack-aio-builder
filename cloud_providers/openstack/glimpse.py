@@ -32,7 +32,6 @@ class Glimpse():
                      {u'addr': u'162.242.251.65', u'version': 4}]}
         :return: string representing an ipv4 address
         """
-        print addresses
         for key, value in addresses.items():
             if key == 'GATEWAY_NET_V6':
                 for addr_info in value:
