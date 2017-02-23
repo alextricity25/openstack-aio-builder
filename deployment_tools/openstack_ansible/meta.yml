@@ -42,14 +42,19 @@ supported_flavors:
   rackspace:
     - "performance2-30"
     - "8"
+  openstack:
+    - "io1-16"
 
 # Required by the plugin
 supported_images:
- rackspace:
- # Ubuntu 14.04
+  rackspace:
+  # Ubuntu 14.04
     - "8e7bdecd-380a-43d7-af9a-ec4f4df51dbd"
- # Ubuntu 16.04
+  # Ubuntu 16.04
     - "821ba5f4-712d-4ec8-9c65-a3fa4bc500f9"
+  # OSIC
+  openstack:
+    - "41ba40fd-e801-4639-a842-e3a2e5a2ebdd"
 
 description: |
   OpenStack-Ansible is an official OpenStack project which aims to deploy production environments from source in a

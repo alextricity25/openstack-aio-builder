@@ -29,7 +29,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         commands = list()
 
         # Adding required packages
-        cloud_init_skeleton['packages'] = ['git', 'screen', 'tmux']
+        cloud_init_skeleton['packages'] = ['git', 'screen', 'tmux', 'python']
 
         # Create the tmux session
         commands.append("tmux new-session -d -s deploy")

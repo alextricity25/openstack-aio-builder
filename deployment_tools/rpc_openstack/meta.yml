@@ -51,6 +51,9 @@ supported_flavors:
     - "performance2-30"
     - "performance2-60"
     - "performance2-90"
+  # OSIC io1-16
+  openstack:
+    - "18"
 # Only the Ubuntu 14.04 and 16.04 image is supported with RPCO currently
 # Required by the plugin
 supported_images:
@@ -59,6 +62,9 @@ supported_images:
     - "8e7bdecd-380a-43d7-af9a-ec4f4df51dbd"
   # Ubuntu 16.04
     - "821ba5f4-712d-4ec8-9c65-a3fa4bc500f9"
+  openstack:
+    # Ubuntu 16.04
+    - "41ba40fd-e801-4639-a842-e3a2e5a2ebdd"
 
 
 # Description
