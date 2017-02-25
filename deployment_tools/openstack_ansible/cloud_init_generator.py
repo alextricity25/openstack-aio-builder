@@ -65,8 +65,8 @@ class CloudInitGenerator(BaseCloudInitGenerator):
 
         # Grabing AIO deployment scripts from metadata file
         commands.append("tmux send-keys 'cd /opt/openstack-ansible && .{} && {}' C-m".format(
-            '&& .'.join(self.meta_info['deployment_scripts']),
-            '&& '.join(self.config_dict.get('post_deployment_commands'))))
+            ' && .'.join(self.meta_info['deployment_scripts']),
+            ' && '.join(self.config_dict.get('post_deployment_commands'))))
 
         # Add post-deployment commands
 #        for command in self.config_dict.get('post_deployment_commands', ''):
