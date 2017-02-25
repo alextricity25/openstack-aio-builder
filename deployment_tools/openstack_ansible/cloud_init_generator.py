@@ -37,7 +37,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
 
         # Add pre-deployment commands
         for command in self.config_dict.get('pre_deployment_commands', ''):
-            commands.append("tmux send-keys '{}' C-m".format(command))
+            commands.append(command)
 
         # Create export commands out of the options given
         for option, value in vars(self.args).iteritems():
@@ -64,15 +64,13 @@ class CloudInitGenerator(BaseCloudInitGenerator):
             self.meta_info['github_repo']))
 
         # Grabing AIO deployment scripts from metadata file
-        commands.append("tmux send-keys 'cd /opt/openstack-ansible && .{}' C-m".format(
-            '&& .'.join(self.meta_info['deployment_scripts'])))
+        commands.append("tmux send-keys 'cd /opt/openstack-ansible && .{} && {}' C-m".format(
+            '&& .'.join(self.meta_info['deployment_scripts']),
+            '&& '.join(self.config_dict.get('post_deployment_commands'))))
 
         # Add post-deployment commands
-        for command in self.config_dict.get('post_deployment_commands', ''):
-            commands.append("tmux send-keys '{}' C-m".format(command))
-
-        # DONE!
-        commands.append("tmux send-keys 'echo DONE' C-m")
+#        for command in self.config_dict.get('post_deployment_commands', ''):
+#            commands.append("tmux send-keys '{}' C-m".format(command))
 
         cloud_init_skeleton['runcmd'] = commands
 
