@@ -53,16 +53,19 @@ def load_options(config_file_dict):
     # value defined in the deployment script.
     option_scripts = meta_info['deployment_scripts'] + meta_info['extra_options_files']
     for deployment_script in option_scripts:
-        with open("{}{}".format(RPCO_TEMP_DIR, deployment_script)) as f:
-            for line in f:
-                option_info = list()
-                result = re.search("^export ([_A-Z]+)=[\$\{\}_A-Z]+:-[\"\']*([=\w\.\/-]*)[\"\']*\}", line)
-                if result:
-                    option_info.append("--{}".format(result.group(1).lower()))
-                    option_info.append(result.group(2))
-                    option_info.append("For a description, see RPCO README")
-                    if option_info not in options_list:
-                        options_list.append(option_info)
+        try:
+            with open("{}{}".format(RPCO_TEMP_DIR, deployment_script)) as f:
+                for line in f:
+                    option_info = list()
+                    result = re.search("^export ([_A-Z]+)=[\$\{\}_A-Z]+:-[\"\']*([=\w\.\/-]*)[\"\']*\}", line)
+                    if result:
+                        option_info.append("--{}".format(result.group(1).lower()))
+                        option_info.append(result.group(2))
+                        option_info.append("For a description, see RPCO README")
+                        if option_info not in options_list:
+                            options_list.append(option_info)
+        except IOError as e:
+            print "Failed to open {}. It probably doesn't exist in this branch. Continuing..".format(deployment_script)
 
     return list(options_list)
 

@@ -9,6 +9,11 @@ class InstanceMaker(BaseInstanceMaker):
         self.cloud_init_config = cloud_init_config
         if vm_image:
             self.image = vm_image
+            # Image might be specified twice. Once in the config file,
+            # again on the command line. We pop the image in instance_info
+            # because only one image attribute can be specified in nova's
+            # create method signature.
+            instance_info.pop('image')
         else:
             self.image = instance_info.pop('image')
 
