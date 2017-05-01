@@ -35,16 +35,9 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         commands.append("tmux new-session -d -s deploy")
         commands.append("tmux select-pane -t 0")
 
-        # Add pre-deployment commands
-        for command in self.config_dict.get('pre_deployment_commands', ''):
-            commands.append(command)
-
         # Create export commands out of the options given
         for option, value in vars(self.args).iteritems():
             commands.append(self._prepare_option(option, value))
-
-        # Make sure we are ALWAYS deploying an AIO
-        commands.append(self._prepare_option("DEPLOY_AIO", "yes"))
 
         # Set ansible_role_fetch_mode
         commands.append(self._prepare_option("ANSIBLE_ROLE_FETCH_MODE", "git-clone"))
@@ -58,20 +51,24 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         branch = self.config_dict['branch']
         commands.append(self._prepare_option("BRANCH", branch))
 
-        # Clone the openstack-ansible repository
-        # The branch value is loaded as an argparse argument in load_options_driver
-        commands.append("tmux send-keys 'git clone -b $BRANCH {} /opt/openstack-ansible' C-m".format(
-            self.meta_info['github_repo']))
+        # Cloning the repo, running the pre-deployment commands, the deployment scripts,
+        # finally the post-deployment commands
+        deploy_string = "tmux send-keys 'git clone -b $BRANCH {} /opt/openstack-ansible".format(
+            self.meta_info['github_repo']
+        )
+        deploy_string += " && cd /opt/openstack-ansible"
+        # Adding the pre-deployment commands if they are specified
+        if self.config_dict.get('pre_deployment_commands'):
+            deploy_string += " && " + ' && '.join(self.config_dict.get('pre_deployment_commands'))
+        # Adding the deployment scripts
+        deploy_string += " && ." + ' && .'.join(self.meta_info['deployment_scripts'])
+        # Adding the post-deployment commands if they are specified
+        if self.config_dict.get('post_deployment_commands'):
+            deploy_string += ' && ' + ' && '.join(self.config_dict.get('post_deployment_commands'))
+        deploy_string += "' C-m"
 
-        # Grabing AIO deployment scripts from metadata file
-        commands.append("tmux send-keys 'cd /opt/openstack-ansible && .{} && {}' C-m".format(
-            ' && .'.join(self.meta_info['deployment_scripts']),
-            ' && '.join(self.config_dict.get('post_deployment_commands'))))
-
-        # Add post-deployment commands
-#        for command in self.config_dict.get('post_deployment_commands', ''):
-#            commands.append("tmux send-keys '{}' C-m".format(command))
-
+        # Adding the deploy_string as a command to the cloud_init cloud-config file.
+        commands.append(deploy_string)
         cloud_init_skeleton['runcmd'] = commands
 
         return "#cloud-config\n{}".format(yaml.dump(cloud_init_skeleton))
