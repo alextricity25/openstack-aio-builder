@@ -55,7 +55,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
 
         # Cloning the repo, running the pre-deployment commands, the deployment scripts,
         # finally the post-deployment commands
-        deploy_string = "tmux send-keys 'git clone -b $BRANCH --recursive {}".format(
+        deploy_string = "tmux send-keys 'git clone -b $BRANCH --recursive {} /opt/rpc-openstack".format(
             self.meta_info['github_repo']
         )
         deploy_string += " && cd /opt/rpc-openstack"
