@@ -33,10 +33,7 @@ class CloudInitGenerator(BaseCloudInitGenerator):
         commands = list()
 
         # Adding required packages
-        # This was commented out on 06-12-2017 because updating any pacakges
-        # before running bootstrap-ansible.yml with an artifacted AIO deployment
-        # caused package dependency conflicts
-        #cloud_init_skeleton['packages'] = ['git', 'screen', 'tmux', 'python']
+        cloud_init_skeleton['packages'] = ['git', 'screen', 'tmux', 'python']
 
         # Create the tmux session
         commands.append("tmux new-session -d -s deploy")
