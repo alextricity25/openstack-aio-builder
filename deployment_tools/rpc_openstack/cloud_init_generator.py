@@ -20,7 +20,10 @@ class CloudInitGenerator(BaseCloudInitGenerator):
 
     def generate_cloud_init(self):
         cloud_init_skeleton = {
-            "package_upgrade": "true",
+            # This was commented out on 06-12-2017 because updating any pacakges
+            # before running bootstrap-ansible.yml with an artifacted AIO deployment
+            # caused package dependency conflicts
+            #"package_upgrade": "true",
             # Kind of looks like "pancakes" when you're tired
             "pacakges": list(),
             "runcmd": list(),
