@@ -17,5 +17,5 @@ runcmd:
   - git config --global user.name "Miguel Alex Cantu"
   - cd /opt/openstack-ansible && scripts/bootstrap-ansible.sh
   - cd /opt/openstack-ansible && scripts/bootstrap-aio.sh
-  - cd /opt/openstack-ansible && scripts/run-playbooks.sh
+  - cd /opt/openstack-ansible/playbooks && openstack-ansible setup-hosts.yml && openstack-ansible setup-infrastructure.yml && openstack-ansible setup-openstack.yml
 output: { all: '| tee -a /var/log/cloud-init-output.log' }

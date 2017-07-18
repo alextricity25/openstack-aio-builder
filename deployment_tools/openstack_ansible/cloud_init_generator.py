@@ -62,6 +62,11 @@ class CloudInitGenerator(BaseCloudInitGenerator):
             deploy_string += " && " + ' && '.join(self.config_dict.get('pre_deployment_commands'))
         # Adding the deployment scripts
         deploy_string += " && ." + ' && .'.join(self.meta_info['deployment_scripts'])
+
+        # run-playbooks was removed here:
+        # https://github.com/openstack/openstack-ansible/commit/022ec0e8883ce99f1e7ba495a4422e909be18653
+        # We now have to run the playbooks ourselves.
+        deploy_string += " && cd /opt/openstack-ansible/playbooks && openstack-ansible setup-hosts.yml && openstack-ansible setup-infrastructure.yml && openstack-ansible setup-openstack.yml"
         # Adding the post-deployment commands if they are specified
         if self.config_dict.get('post_deployment_commands'):
             deploy_string += ' && ' + ' && '.join(self.config_dict.get('post_deployment_commands'))

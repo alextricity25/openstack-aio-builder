@@ -14,7 +14,6 @@ github_repo: "https://github.com/openstack/openstack-ansible"
 deployment_scripts:
   - "/scripts/bootstrap-ansible.sh"
   - "/scripts/bootstrap-aio.sh"
-  - "/scripts/run-playbooks.sh"
 
 # A shorthand name for the deployment tool. Must be less than 8 alphabetical characters, with no spaces
 # Required by the main program
